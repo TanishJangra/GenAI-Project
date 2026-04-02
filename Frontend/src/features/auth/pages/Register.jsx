@@ -1,13 +1,20 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useNavigate, Link } from 'react-router';
+import { useAuth } from './../hooks/useAuth';
 
 const Register = () => {
 
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const {loading, handleRegister} = useAuth();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle registration logic here
+    await handleRegister({ username, email, password });
+    navigate('/login');
   }
 
   return (
@@ -17,17 +24,19 @@ const Register = () => {
             <form onSubmit={handleSubmit}>
                 <div className="input-group">
                     <label htmlFor="username">Username</label>
-                    <input type="text" id="username" name='username' placeholder='Enter Username' />
+                    <input type="text" id="username" name='username' placeholder='Enter Username' value={username} onChange={(e) => setUsername(e.target.value)} />
                 </div>
                 <div className="input-group">
                     <label htmlFor="email">Email</label>
-                    <input type="email" id="email" name='email' placeholder='Enter Email' />
+                    <input type="email" id="email" name='email' placeholder='Enter Email' value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div className="input-group">
                     <label htmlFor="password">Password</label>
-                    <input type="password" id="password" name='password' placeholder='Enter Password' />
+                    <input type="password" id="password" name='password' placeholder='Enter Password' value={password} onChange={(e) => setPassword(e.target.value)} />
                 </div>
-                <button className='button primary-button'>Register</button>
+                <button className='button primary-button' disabled={loading}>
+                    {loading ? 'Registering...' : 'Register'}
+                </button>
             </form>
             <p>Already have an account? <Link to="/login" className='button secondary-button'>Login</Link></p>
         </div>
