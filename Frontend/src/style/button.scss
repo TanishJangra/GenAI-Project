@@ -1,0 +1,17 @@
+.button{
+    border: none;
+    outline: none;
+    padding-inline: 1.5rem;
+    padding-block: 0.75rem;
+    border-radius: 1rem;
+    cursor: pointer;
+
+    &.primary-button{
+        background-color: #007bff;
+        color: white;
+
+        &:hover{
+            background-color: #0056b3;
+        }
+    }
+}
