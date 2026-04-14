@@ -31,9 +31,15 @@ const interviewReportSchema = new mongoose.Schema({
     technicalQuestions: { type: [technicalQuestionSchema], required: [true, 'Technical questions are required'] },
     behavioralQuestions: { type: [behavioralQuestionSchema], required: [true, 'Behavioral questions are required'] },
     skillGaps: { type: [skillGapSchema], required: [true, 'Skill gaps are required'] },
-    preparationPlan: { type: [preparationPlanSchema], required: [true, 'Preparation plan is required'] }
+    preparationPlan: { type: [preparationPlanSchema], required: [true, 'Preparation plan is required'] },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: [true, 'User reference is required']
+    }
 
 }, { timestamps: true });
 
 const InterviewReportModel = mongoose.model('InterviewReport', interviewReportSchema);
+
 module.exports = InterviewReportModel;
