@@ -36,6 +36,7 @@ async function generateInterviewReportController(req, res) {
 
 
     } catch (error) {
+        console.error("Error in generateInterviewReportController:", error);
         res.status(500).json({
             success: false,
             message: 'Error generating interview report',

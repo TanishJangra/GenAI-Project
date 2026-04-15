@@ -224,16 +224,16 @@ async function generateInterviewReport({
         responseJsonSchema: zodToJsonSchema(interviewReportSchema),
       },
     });
+    const raw = JSON.parse(response.text);
+    console.log("Raw AI Response: ", raw);
+    const interviewReport = normalizeInterviewReport(raw);
+    console.log("Generated Interview Report: ", interviewReport);
+    return interviewReport;
     
   } catch (error) {
     console.error("Error generating interview report:", error);
     throw error;
   }
-  const raw = JSON.parse(response.text);
-  console.log("Raw AI Response: ", raw);
-  const interviewReport = normalizeInterviewReport(raw);
-  console.log("Generated Interview Report: ", interviewReport);
-  return interviewReport;
 }
 
 async function generatePdfFromHtml(htmlContent) {
