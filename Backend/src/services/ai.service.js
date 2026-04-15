@@ -210,19 +210,25 @@ async function generateInterviewReport({
     Return ONLY valid JSON.
     `;
 
-  const response = await ai.models.generateContent({
-    model: "gemini-3-flash-preview",
-    contents: [
-    {
-        role: "user",
-        parts: [{ text: prompt }]
-    }
-    ],
-    config: {
-      responseMimeType: "application/json",
-      responseJsonSchema: zodToJsonSchema(interviewReportSchema),
-    },
-  });
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: [
+      {
+          role: "user",
+          parts: [{ text: prompt }]
+      }
+      ],
+      config: {
+        responseMimeType: "application/json",
+        responseJsonSchema: zodToJsonSchema(interviewReportSchema),
+      },
+    });
+    
+  } catch (error) {
+    console.error("Error generating interview report:", error);
+    throw error;
+  }
   const raw = JSON.parse(response.text);
   console.log("Raw AI Response: ", raw);
   const interviewReport = normalizeInterviewReport(raw);
@@ -231,9 +237,9 @@ async function generateInterviewReport({
 }
 
 async function generatePdfFromHtml(htmlContent) {
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.setContent(htmlContent, { waitUntil: "networkidle0" })
+    await page.setContent(htmlContent, { waitUntil: "networkidle0" });
 
     const pdfBuffer = await page.pdf({
         format: "A4", margin: {
@@ -242,11 +248,11 @@ async function generatePdfFromHtml(htmlContent) {
             left: "15mm",
             right: "15mm"
         }
-    })
+    });
 
-    await browser.close()
+    await browser.close();
 
-    return pdfBuffer
+    return pdfBuffer;
 }
 
 async function generateResumePdf({ resume, selfDescription, jobDescription }) {
@@ -278,11 +284,11 @@ async function generateResumePdf({ resume, selfDescription, jobDescription }) {
     })
 
 
-    const jsonContent = JSON.parse(response.text)
+    const jsonContent = JSON.parse(response.text);
 
-    const pdfBuffer = await generatePdfFromHtml(jsonContent.html)
+    const pdfBuffer = await generatePdfFromHtml(jsonContent.html);
 
-    return pdfBuffer
+    return pdfBuffer;
 
 }
 
